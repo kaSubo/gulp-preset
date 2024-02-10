@@ -1,0 +1,42 @@
+//Media querries
+
+@mixin desktop{
+  @media only screen and (max-width:$desktop){
+    @content;
+  }
+}
+@mixin laptop{
+  @media only screen and (max-width:$laptop){
+    @content;
+  }
+}
+@mixin tablet{
+  @media only screen and (max-width:$tablet){
+    @content;
+  }
+}
+@mixin small-tablet{
+  @media only screen and (max-width:$small-tablet){
+    @content;
+  }
+}
+@mixin mobile-l{
+  @media only screen and (max-width:$mobile-l){
+    @content;
+  }
+}
+@mixin mobile-m{
+  @media only screen and (max-width:$mobile-m){
+    @content;
+  }
+}
+
+//Retina Background
+
+@mixin retina-bg($image) {
+  @media 
+    (-webkit-min-device-pixel-ratio: 2),
+    (min-resolution: 192dpi) {
+      background-image: $image;
+  }
+}

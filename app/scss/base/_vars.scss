@@ -1,0 +1,47 @@
+:root{
+
+//Index variable for responsive text & blocks
+
+ --index: calc(1vw + 1vh);
+
+//Container 
+
+  --content-width: 120rem;
+  --container-offset: 1.5rem;
+  --container-width: calc(var(--content-width) + (var(--container-offset) * 2));
+
+//Grid column gap & offsets
+
+  --offset: 1rem;
+
+//Text colors
+
+  --main-color: #000;
+  --title-color: #fff;
+  --light-color: #fff;
+  --dark-color: #000;
+  --accent-color: #fff;
+  --active-color: #fff;
+
+//Ui colors
+
+  --ui-1: #fff;
+  --ui-2: #fff;
+  --ui-3: #fff;
+  --ui-4: #fff;
+
+//Fonts
+
+  --main-font: 'Open Sans', sans-serif;
+  --secondary-font: 'Open Sans', sans-serif;
+  --accent-font: 'Open Sans', sans-serif;
+}
+
+//Media querries
+
+$desktop: 1080px;
+$laptop: 1024px;
+$tablet: 991px;
+$small-tablet: 768px;
+$mobile-l: 425px;
+$mobile-m: 375px;
