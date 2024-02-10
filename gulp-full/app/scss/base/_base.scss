@@ -1,0 +1,39 @@
+html {
+	scroll-behavior: smooth;
+	font-size: 62.5%;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	font-family: var(--main-font);;
+	font-size: 1.6rem;
+	line-height: 1.2;
+	color: var(--main-color);
+}
+
+.container {
+	max-width: var(--container-width);
+	padding: 0 var(--container-offset);
+	margin: 0 auto;
+}
+
+
+//Fixed footer for multipage
+
+.page {
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+}
+
+.main {
+	flex: 1 0 auto;
+}
+
+.footer {
+	flex: 0 0 auto;
+}
