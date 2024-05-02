@@ -12,7 +12,14 @@ body {
 	font-family: var(--main-font);;
 	font-size: 1.6rem;
 	line-height: 1.2;
-	color: var(--main-color);
+	color: var(--main-dark);
+
+	@include small-tablet{
+		&.show-sidebar{
+			overflow: hidden;
+		}
+	}
+
 }
 
 .container {
