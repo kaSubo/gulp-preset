@@ -13,6 +13,7 @@ const notify 		 	= require('gulp-notify');
 const webpack 	 	= require('webpack-stream');
 const babel 		 	= require('gulp-babel');
 const imagemin 	 	= require('gulp-imagemin');
+const svgsprite   = require('gulp-svg-sprite');
 const changed 	 	= require('gulp-changed');
 
 gulp.task('clean:dev', function (done) {
@@ -80,10 +81,68 @@ gulp.task('sass:dev', function () {
 
 gulp.task('images:dev', function () {
 	return gulp
-		.src('./app/images/**/*')
+  .src(['./app/images/**/*', '!./app/images/svgicons/**/*'])
 		.pipe(changed('./build/images/'))
 		// .pipe(imagemin({ verbose: true }))
 		.pipe(gulp.dest('./build/images/'));
+});
+
+const svgStack = {
+	mode: {
+		stack: {
+			example: true,
+		},
+	},
+	shape: {
+		transform: [
+			{
+				svgo: {
+					js2svg: { indent: 4, pretty: true },
+				},
+			},
+		],
+	},
+};
+
+const svgSymbol = {
+	mode: {
+		symbol: {
+			sprite: '../sprite.symbol.svg',
+		},
+	},
+	shape: {
+		transform: [
+			{
+				svgo: {
+					js2svg: { indent: 4, pretty: true },
+					plugins: [
+						{
+							name: 'removeAttrs',
+							params: {
+								attrs: '(fill|stroke)',
+							},
+						},
+					],
+				},
+			},
+		],
+	},
+};
+
+gulp.task('svgStack:dev', function () {
+	return gulp
+		.src('./app/images/svgicons/**/*.svg')
+		.pipe(plumber(plumberNotify('SVG:dev')))
+		.pipe(svgsprite(svgStack))
+		.pipe(gulp.dest('./build/images/svgsprite/'))
+});
+
+gulp.task('svgSymbol:dev', function () {
+	return gulp
+		.src('./app/images/svgicons/**/*.svg')
+		.pipe(plumber(plumberNotify('SVG:dev')))
+		.pipe(svgsprite(svgSymbol))
+		.pipe(gulp.dest('./build/images/svgsprite/'));
 });
 
 gulp.task('fonts:dev', function () {
@@ -121,9 +180,16 @@ gulp.task('server:dev', function () {
 
 gulp.task('watch:dev', function () {
 	gulp.watch('./app/scss/**/*.scss', gulp.parallel('sass:dev'));
-	gulp.watch('./app/html/**/*.html', gulp.parallel('html:dev'));
+	gulp.watch(
+		['./app/html/**/*.html', './app/html/**/*.json'],
+		gulp.parallel('html:dev')
+	);
 	gulp.watch('./app/images**/*', gulp.parallel('images:dev'));
 	gulp.watch('./app/fonts/**/*', gulp.parallel('fonts:dev'));
 	gulp.watch('./app/files/**/*', gulp.parallel('files:dev'));
 	gulp.watch('./app/js/**/*.js', gulp.parallel('js:dev'));
+  gulp.watch(
+		'./app/images/svgicons/*',
+		gulp.series('svgStack:dev', 'svgSymbol:dev')
+	);
 });

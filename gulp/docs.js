@@ -29,6 +29,9 @@ const changed 		 = require('gulp-changed');
 const imagemin 		 = require('gulp-imagemin');
 const webp 				 = require('gulp-webp');
 
+//SVG
+const svgsprite    = require('gulp-svg-sprite');
+
 gulp.task('clean:docs', function (done) {
 	if (fs.existsSync('./docs/')) {
 		return gulp
@@ -96,7 +99,7 @@ gulp.task('sass:docs', function () {
 
 gulp.task('images:docs', function () {
 	return gulp
-		.src('./app/images/**/*')
+    .src(['./app/images/**/*', '!./app/images/svgicons/**/*'])
 		.pipe(changed('./docs/images/'))
 		.pipe(webp())
 		.pipe(gulp.dest('./docs/images/'))
@@ -104,6 +107,54 @@ gulp.task('images:docs', function () {
 		.pipe(changed('./docs/images/'))
 		.pipe(imagemin({ verbose: true }))
 		.pipe(gulp.dest('./docs/images/'));
+});
+
+const svgStack = {
+	mode: {
+		stack: {
+			example: true,
+		},
+	},
+};
+
+const svgSymbol = {
+	mode: {
+		symbol: {
+			sprite: '../sprite.symbol.svg',
+		},
+	},
+	shape: {
+		transform: [
+			{
+				svgo: {
+					plugins: [
+						{
+							name: 'removeAttrs',
+							params: {
+								attrs: '(fill|stroke)',
+							},
+						},
+					],
+				},
+			},
+		],
+	},
+};
+
+gulp.task('svgStack:docs', function () {
+	return gulp
+		.src('./app/images/svgicons/**/*.svg')
+		.pipe(plumber(plumberNotify('SVG:dev')))
+		.pipe(svgsprite(svgStack))
+		.pipe(gulp.dest('./docs/images/svgsprite/'));
+});
+
+gulp.task('svgSymbol:docs', function () {
+	return gulp
+		.src('./app/images/svgicons/**/*.svg')
+		.pipe(plumber(plumberNotify('SVG:dev')))
+		.pipe(svgsprite(svgSymbol))
+		.pipe(gulp.dest('./docs/images/svgsprite/'));
 });
 
 gulp.task('fonts:docs', function () {
